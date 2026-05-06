@@ -14,9 +14,6 @@ import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
 
-// 🔗 Connect DB
-connectDB();
-
 const app = express();
 const __dirname = path.resolve();
 
@@ -79,8 +76,19 @@ app.use((err, req, res, next) => {
 });
 
 // ================= SERVER =================
-const PORT = process.env.PORT || 5000;
+const startServer = async () => {
+  try {
+    await connectDB();
 
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on port ${PORT}`)
-);
+    const PORT = process.env.PORT || 4000;
+
+    app.listen(PORT, () =>
+      console.log(`🚀 Server running on port ${PORT}`)
+    );
+  } catch (err) {
+    console.error("DB Connection Failed ❌", err);
+    process.exit(1);
+  }
+};
+
+startServer();

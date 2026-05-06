@@ -49,22 +49,12 @@ app.get("/api/health", (req, res) => {
   res.status(200).json({ message: "API is running 🚀" });
 });
 
-// ================= STATIC FRONTEND =================
+// ================= Route =================
 
-if (process.env.NODE_ENV === "production") {
-  // ⚠️ Vite uses 'dist', not 'build'
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.use((req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, '../frontend/dist/index.html')
-    );
-  });
-} else {
   app.get("/", (req, res) => {
     res.send("ApnaBazaar API is running in Development mode...");
   });
-}
+
 
 // ================= ERROR HANDLER =================
 app.use((err, req, res, next) => {

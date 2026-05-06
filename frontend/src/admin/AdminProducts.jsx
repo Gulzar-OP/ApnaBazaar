@@ -8,7 +8,7 @@ const AdminProducts = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch('/api/products');
+      const res = await fetch(`${API_URL}/api/products`);
       const data = await res.json();
       setProducts(Array.isArray(data) ? data : []);
     };

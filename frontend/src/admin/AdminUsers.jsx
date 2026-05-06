@@ -8,7 +8,8 @@ const AdminUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       const res = await fetch(`${API_URL}/api/auth/users`, {
-        headers: { Authorization: `Bearer ${user.token}` }
+        method: 'GET',
+        credentials: 'include'
       });
       const data = await res.json();
       setUsers(Array.isArray(data) ? data : []);

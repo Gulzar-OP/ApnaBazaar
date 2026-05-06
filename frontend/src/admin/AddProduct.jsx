@@ -1,7 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-  const API_URL = import.meta.env.VITE_BACKEND_URL;
+import '../styles/addProduct.css'
+
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+
 const AddProduct = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -17,7 +20,6 @@ const AddProduct = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Proper redirect logic
   useEffect(() => {
     if (!user || user.role !== 'admin') {
       navigate('/');
@@ -43,7 +45,7 @@ const AddProduct = () => {
       const res = await fetch(`${API_URL}/api/products`, {
         method: 'POST',
         credentials: 'include',
-        body: data   // ✅ FIXED
+        body: data
       });
 
       const responseData = await res.json();
@@ -54,7 +56,6 @@ const AddProduct = () => {
       } else {
         alert(responseData.message || 'Error creating product');
       }
-
     } catch (error) {
       console.error(error);
       alert('Something went wrong');
@@ -64,66 +65,77 @@ const AddProduct = () => {
   };
 
   return (
-    <div style={container}>
-      <h2 style={{ color: '#f97316' }}>Add Product</h2>
+    <div className="add-product-page">
+      <div className="add-product-card">
+        <div className="add-product-header">
+          <p className="add-product-subtitle">Admin Panel</p>
+          <h2 className="add-product-title">Add Product</h2>
+          <p className="add-product-text">Fill product details and upload image</p>
+        </div>
 
-      <form onSubmit={handleSubmit} style={formStyle}>
-        <input type="text" placeholder="Name" required
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          style={inputStyle}
-        />
+        <form onSubmit={handleSubmit} className="add-product-form">
+          <div className="form-row">
+            <input
+              type="text"
+              placeholder="Name"
+              required
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="form-input"
+            />
 
-        <textarea placeholder="Description" required
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          style={inputStyle}
-        />
+            <input
+              type="text"
+              placeholder="Category"
+              required
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              className="form-input"
+            />
+          </div>
 
-        <input type="number" placeholder="Price" required
-          onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-          style={inputStyle}
-        />
+          <textarea
+            placeholder="Description"
+            required
+            rows="5"
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            className="form-textarea"
+          />
 
-        <input type="text" placeholder="Category" required
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-          style={inputStyle}
-        />
+          <div className="form-row">
+            <input
+              type="number"
+              placeholder="Price"
+              required
+              onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+              className="form-input"
+            />
 
-        <input type="number" placeholder="Stock" required
-          onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-          style={inputStyle}
-        />
+            <input
+              type="number"
+              placeholder="Stock"
+              required
+              onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+              className="form-input"
+            />
+          </div>
 
-        <input type="file" accept="image/*" required
-          onChange={(e) => setImage(e.target.files[0])}
-          style={{ color: '#fff' }}
-        />
+          <div className="file-upload-box">
+            <label className="file-upload-label">Product Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              required
+              onChange={(e) => setImage(e.target.files[0])}
+              className="file-input"
+            />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Uploading...' : 'Create Product'}
-        </button>
-      </form>
+          <button type="submit" className="submit-btn" disabled={loading}>
+            {loading ? 'Uploading...' : 'Create Product'}
+          </button>
+        </form>
+      </div>
     </div>
   );
-};
-
-const container = {
-  maxWidth: '500px',
-  margin: '40px auto',
-  padding: '20px',
-  background: '#111',
-  color: '#fff'
-};
-
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '10px'
-};
-
-const inputStyle = {
-  padding: '10px',
-  background: '#000',
-  color: '#fff'
 };
 
 export default AddProduct;
